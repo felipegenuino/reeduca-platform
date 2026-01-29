@@ -3,10 +3,10 @@ import type { Config } from 'tailwindcss';
 const config: Config = {
   darkMode: ['class'],
   content: [
+    './app/**/*.{ts,tsx}',
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    '../../packages/ui/**/*.{ts,tsx}',
+    './node_modules/@reeduca/ui/**/*.{ts,tsx}',
   ],
   theme: {
     extend: {
