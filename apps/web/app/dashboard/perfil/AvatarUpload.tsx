@@ -92,7 +92,7 @@ export function AvatarUpload({ currentAvatarUrl, userId }: { currentAvatarUrl: s
       // Atualizar avatar_url no profile
       const { error: updateError } = await supabase
         .from('profiles')
-        .update({ avatar_url: publicUrl })
+        .update({ avatar_url: publicUrl } as never)
         .eq('user_id', user.id);
 
       if (updateError) {
@@ -142,7 +142,7 @@ export function AvatarUpload({ currentAvatarUrl, userId }: { currentAvatarUrl: s
       // Limpar avatar_url no profile
       const { error: updateError } = await supabase
         .from('profiles')
-        .update({ avatar_url: null })
+        .update({ avatar_url: null } as never)
         .eq('user_id', user.id);
 
       if (updateError) {

@@ -31,7 +31,7 @@ export function EditNameForm({ initialName }: { initialName: string }) {
       }
       const { error: err } = await supabase
         .from('profiles')
-        .update({ name: trimmed })
+        .update({ name: trimmed } as never)
         .eq('user_id', user.id);
       if (err) {
         setError(err.message);

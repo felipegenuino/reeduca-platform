@@ -10,15 +10,16 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@reeduca/database": "workspace:*",
-    "@supabase/ssr": "^0.5.2",
-    "@reeduca/ui": "workspace:*",
     "@reeduca/auth": "workspace:*",
+    "@reeduca/database": "workspace:*",
     "@reeduca/pagamentos": "workspace:*",
+    "@reeduca/ui": "workspace:*",
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.47.10",
+    "lucide-react": "^0.468.0",
     "next": "15.5.11",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "lucide-react": "^0.468.0"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

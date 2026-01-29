@@ -52,7 +52,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
         name: user.user_metadata?.name || null,
         avatar_url: user.user_metadata?.avatar_url || null,
         role: 'student',
-      })
+      } as never)
       .select('id, user_id, name, avatar_url, role, subscription_status, created_at, updated_at')
       .single();
 
@@ -66,7 +66,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
 
   return {
     user,
-    profile: profile as Profile,
+    profile: profile as unknown as Profile,
   };
 }
 
@@ -91,7 +91,7 @@ export async function requireCurrentUser(): Promise<CurrentUser> {
   let { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('id, user_id, name, avatar_url, role, subscription_status, created_at, updated_at')
-    .eq('user_id', user.id)
+    .eq('user_id', user!.id)
     .single();
 
   // Se não existe, cria o perfil (fallback se o trigger falhou)
@@ -99,11 +99,11 @@ export async function requireCurrentUser(): Promise<CurrentUser> {
     const { data: newProfile, error: createError } = await supabase
       .from('profiles')
       .insert({
-        user_id: user.id,
-        name: user.user_metadata?.name || null,
-        avatar_url: user.user_metadata?.avatar_url || null,
+        user_id: user!.id,
+        name: user!.user_metadata?.name || null,
+        avatar_url: user!.user_metadata?.avatar_url || null,
         role: 'student',
-      })
+      } as never)
       .select('id, user_id, name, avatar_url, role, subscription_status, created_at, updated_at')
       .single();
 
@@ -118,7 +118,7 @@ export async function requireCurrentUser(): Promise<CurrentUser> {
   }
 
   return {
-    user,
-    profile: profile as Profile,
+    user: user!,
+    profile: profile as unknown as Profile,
   };
 }
