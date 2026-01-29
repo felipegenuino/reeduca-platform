@@ -113,6 +113,10 @@ create policy "Users can update own profile"
   on public.profiles for update
   using (auth.uid() = user_id);
 
+create policy "Users can insert own profile"
+  on public.profiles for insert
+  with check (auth.uid() = user_id);
+
 -- Products: Public can read published products
 create policy "Public can view published products"
   on public.products for select

@@ -37,13 +37,32 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
 
   if (userError || !user) return null;
 
-  const { data: profile, error: profileError } = await supabase
+  let { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('id, user_id, name, avatar_url, role, subscription_status, created_at, updated_at')
     .eq('user_id', user.id)
     .single();
 
-  if (profileError || !profile) return null;
+  // Se o perfil não existe, tenta criar (fallback se o trigger falhou)
+  if (profileError || !profile) {
+    const { data: newProfile, error: createError } = await supabase
+      .from('profiles')
+      .insert({
+        user_id: user.id,
+        name: user.user_metadata?.name || null,
+        avatar_url: user.user_metadata?.avatar_url || null,
+        role: 'student',
+      })
+      .select('id, user_id, name, avatar_url, role, subscription_status, created_at, updated_at')
+      .single();
+
+    if (createError || !newProfile) {
+      // Se falhar ao criar (ex: policy não existe), retorna null
+      // A página vai redirecionar para login
+      return null;
+    }
+    profile = newProfile;
+  }
 
   return {
     user,
@@ -53,13 +72,53 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
 
 /**
  * Exige usuário autenticado. Redireciona para /login se não houver sessão.
+ * Cria perfil automaticamente se o usuário existir mas o perfil não.
  * Use em layouts ou páginas que devem ser protegidas no servidor também.
  */
 export async function requireCurrentUser(): Promise<CurrentUser> {
-  const current = await getCurrentUser();
-  if (!current) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
     const { redirect } = await import('next/navigation');
     redirect('/login?redirectTo=' + encodeURIComponent('/dashboard'));
   }
-  return current;
+
+  // Verifica se o perfil existe
+  let { data: profile, error: profileError } = await supabase
+    .from('profiles')
+    .select('id, user_id, name, avatar_url, role, subscription_status, created_at, updated_at')
+    .eq('user_id', user.id)
+    .single();
+
+  // Se não existe, cria o perfil (fallback se o trigger falhou)
+  if (profileError || !profile) {
+    const { data: newProfile, error: createError } = await supabase
+      .from('profiles')
+      .insert({
+        user_id: user.id,
+        name: user.user_metadata?.name || null,
+        avatar_url: user.user_metadata?.avatar_url || null,
+        role: 'student',
+      })
+      .select('id, user_id, name, avatar_url, role, subscription_status, created_at, updated_at')
+      .single();
+
+    if (createError || !newProfile) {
+      // Se falhar ao criar, faz logout forçado para o usuário criar conta novamente
+      // ou aguardar o trigger criar o perfil
+      await supabase.auth.signOut();
+      const { redirect } = await import('next/navigation');
+      redirect('/login?error=profile_missing');
+    }
+    profile = newProfile;
+  }
+
+  return {
+    user,
+    profile: profile as Profile,
+  };
 }
