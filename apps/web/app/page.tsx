@@ -1,8 +1,21 @@
 import { Button } from '@reeduca/ui';
-import { GraduationCap, Users, Award, BookOpen, ArrowRight } from 'lucide-react';
+import {
+  GraduationCap,
+  Users,
+  Award,
+  BookOpen,
+  ArrowRight,
+  LogIn,
+  Rocket,
+  LayoutDashboard,
+  ShieldCheck,
+} from 'lucide-react';
 import Link from 'next/link';
+import { getCurrentUser } from '@/lib/auth';
 
-export default function HomePage() {
+export default async function HomePage() {
+  const currentUser = await getCurrentUser();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Header */}
@@ -28,14 +41,39 @@ export default function HomePage() {
           </div>
 
           <div className="flex items-center gap-3">
-            <Link href="/entrar">
-              <Button variant="ghost" size="sm">
-                Entrar
-              </Button>
-            </Link>
-            <Link href="/cadastro">
-              <Button size="sm">Começar Agora</Button>
-            </Link>
+            {currentUser ? (
+              <>
+                <Link href="/dashboard">
+                  <Button variant="ghost" size="sm" className="gap-1.5">
+                    <LayoutDashboard className="w-4 h-4" />
+                    Dashboard
+                  </Button>
+                </Link>
+                {currentUser.profile.role === 'admin' && (
+                  <Link href="/admin">
+                    <Button size="sm" className="gap-1.5">
+                      <ShieldCheck className="w-4 h-4" />
+                      Admin
+                    </Button>
+                  </Link>
+                )}
+              </>
+            ) : (
+              <>
+                <Link href="/entrar">
+                  <Button variant="ghost" size="sm" className="gap-1.5">
+                    <LogIn className="w-4 h-4" />
+                    Entrar
+                  </Button>
+                </Link>
+                <Link href="/cadastro">
+                  <Button size="sm" className="gap-1.5">
+                    <Rocket className="w-4 h-4" />
+                    Começar Agora
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         </nav>
       </header>

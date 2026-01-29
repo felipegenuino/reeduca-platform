@@ -10,39 +10,46 @@
 
 ---
 
-## Paleta
+## Paleta — Premium
 
-**Origem:** Mundo clínico — scrubs cirúrgicos (teal), papel de prontuário (creme), equipamentos médicos (cinza neutro quente).
+**Direção:** Interface premium, editorial. Neutros com temperatura única (quente), um acento de confiança (teal profundo), hierarquia clara sem ruído.
+
+**Princípios:**
+- **Neutros quentes** — fundo tipo papel (32°), texto “soft black” (218° 9%) para leitura confortável.
+- **Um acento** — teal clínico profundo (176° 26%) em CTAs e links; usado com moderação.
+- **Degraus de superfície** — background → card → muted com passos visíveis (97% → 95% → 90%).
+- **Bordas presentes** — 87% luminosidade, definem regiões sem competir com o conteúdo.
+- **Semânticos contidos** — success, warning, destructive um pouco dessaturados e mais escuros.
 
 ### Light Mode
 | Token | Valor HSL | Uso |
 |---|---|---|
-| `--background` | 40 20% 98% | Canvas base — creme levíssimo |
-| `--foreground` | 200 15% 15% | Texto principal — escuro quente |
-| `--card` | 40 15% 97% | Superfície de cards |
-| `--primary` | 174 42% 40% | Teal clínico — acento principal |
-| `--primary-foreground` | 40 20% 98% | Texto sobre primary |
-| `--secondary` | 40 14% 93% | Superfície secundária |
-| `--muted` | 40 10% 94% | Backgrounds sutis |
-| `--muted-foreground` | 200 8% 50% | Texto terciário |
-| `--accent` | 174 30% 93% | Teal diluído — hover, destaques |
-| `--accent-foreground` | 174 42% 28% | Texto sobre accent |
-| `--border` | 40 12% 90% | Bordas padrão — quase invisíveis |
-| `--input` | 40 10% 91% | Borda de controles |
-| `--destructive` | 0 65% 54% | Ações destrutivas |
-| `--success` | 158 45% 42% | Status positivo |
-| `--warning` | 38 80% 55% | Alerta |
+| `--background` | 32 18% 97% | Canvas — papel quente |
+| `--foreground` | 218 18% 9% | Texto principal — soft black |
+| `--card` | 32 14% 95% | Superfície de cards |
+| `--primary` | 176 52% 26% | Teal profundo — CTAs, links |
+| `--primary-foreground` | 0 0% 99% | Texto sobre primary |
+| `--secondary` | 32 12% 91% | Superfície secundária |
+| `--muted` | 32 10% 90% | Backgrounds sutis |
+| `--muted-foreground` | 218 10% 38% | Texto terciário |
+| `--accent` | 176 24% 92% | Hover / destaque sutil |
+| `--accent-foreground` | 176 52% 24% | Texto sobre accent |
+| `--border` | 218 10% 87% | Bordas definidas |
+| `--input` | 218 9% 86% | Controles |
+| `--destructive` | 0 58% 44% | Ações destrutivas |
+| `--success` | 164 52% 30% | Status positivo |
+| `--warning` | 38 72% 44% | Alerta |
 
 ### Sidebar
 | Token | Valor HSL |
 |---|---|
-| `--sidebar` | 40 15% 96.5% |
-| `--sidebar-border` | 40 12% 91% |
-| `--sidebar-accent` | 174 30% 93% |
-| `--sidebar-muted` | 200 8% 50% |
+| `--sidebar` | 32 14% 95% |
+| `--sidebar-border` | 218 10% 87% |
+| `--sidebar-accent` | 176 24% 90% |
+| `--sidebar-muted` | 218 10% 38% |
 
 ### Dark Mode
-Mesma identidade, valores invertidos. Primary sobe para 48% luminosidade. Superfícies em azul-escuro quente (200 15% 7%).
+Neutros invertidos: fundo slate (218° 5%). Primary sobe para 50% luminosidade no escuro. Mesma identidade, contraste preservado.
 
 ---
 
