@@ -12,6 +12,7 @@ import {
   GraduationCap,
   Menu,
   X,
+  BookMarked,
 } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@reeduca/ui';
@@ -20,6 +21,7 @@ import { createClient } from '@/lib/supabase/client';
 const navigation = [
   { label: 'Início', href: '/dashboard', icon: LayoutDashboard },
   { label: 'Meus Cursos', href: '/dashboard/cursos', icon: BookOpen },
+  { label: 'Guia de Bolso', href: '/dashboard/guia-de-bolso', icon: BookMarked },
   { label: 'Progresso', href: '/dashboard/progresso', icon: TrendingUp },
   { label: 'Certificados', href: '/dashboard/certificados', icon: Award },
 ];

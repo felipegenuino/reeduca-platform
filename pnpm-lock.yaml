@@ -42,7 +42,7 @@ importers:
         specifier: ^0.468.0
         version: 0.468.0(react@19.2.4)
       next:
-        specifier: ^15.1.4
+        specifier: 15.5.11
         version: 15.5.11(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       react:
         specifier: ^19.0.0
@@ -67,7 +67,7 @@ importers:
         specifier: ^9.17.0
         version: 9.39.2(jiti@1.21.7)
       eslint-config-next:
-        specifier: ^15.1.4
+        specifier: 15.5.11
         version: 15.5.11(eslint@9.39.2(jiti@1.21.7))(typescript@5.9.3)
       postcss:
         specifier: ^8.4.49
@@ -5698,7 +5698,7 @@ snapshots:
   postcss@8.4.31:
     dependencies:
       nanoid: 3.3.11
-      picocolors: 1.0.1
+      picocolors: 1.1.1
       source-map-js: 1.2.1
 
   postcss@8.5.6:
