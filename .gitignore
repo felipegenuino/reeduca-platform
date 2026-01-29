@@ -19,10 +19,12 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Local env files
+# Local env files (nunca commitar credenciais)
 .env
 .env*.local
 .env.production
+.env.prod
+.env.*.prod
 
 # Vercel
 .vercel
