@@ -242,9 +242,8 @@ Agora que está rodando:
    - Use um email de teste
 
 3. **Configurar Asaas (opcional)**:
-   - Acesse https://sandbox.asaas.com
-   - Crie conta
-   - Copie API key para `.env.local`
+   - Guia completo: **[docs/ASAAS.md](./docs/ASAAS.md)** (onde pegar API key, webhook, sandbox vs produção).
+   - Resumo: criar conta em [sandbox.asaas.com](https://sandbox.asaas.com) → Integrações → API → copiar chave → `ASAAS_API_KEY` no `.env.local`.
 
 ## 🆘 Precisa de Ajuda?
 
