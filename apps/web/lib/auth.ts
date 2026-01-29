@@ -71,7 +71,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
 }
 
 /**
- * Exige usuário autenticado. Redireciona para /login se não houver sessão.
+ * Exige usuário autenticado. Redireciona para /entrar se não houver sessão.
  * Cria perfil automaticamente se o usuário existir mas o perfil não.
  * Use em layouts ou páginas que devem ser protegidas no servidor também.
  */
@@ -84,7 +84,7 @@ export async function requireCurrentUser(): Promise<CurrentUser> {
 
   if (userError || !user) {
     const { redirect } = await import('next/navigation');
-    redirect('/login?redirectTo=' + encodeURIComponent('/dashboard'));
+    redirect('/entrar?redirectTo=' + encodeURIComponent('/dashboard'));
   }
 
   // Verifica se o perfil existe
@@ -112,7 +112,7 @@ export async function requireCurrentUser(): Promise<CurrentUser> {
       // ou aguardar o trigger criar o perfil
       await supabase.auth.signOut();
       const { redirect } = await import('next/navigation');
-      redirect('/login?error=profile_missing');
+      redirect('/entrar?error=profile_missing');
     }
     profile = newProfile;
   }

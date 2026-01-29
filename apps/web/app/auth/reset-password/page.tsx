@@ -135,8 +135,8 @@ export default function ResetPasswordPage() {
           </form>
 
           <p className="mt-5 text-center text-sm text-[hsl(var(--muted-foreground))]">
-            <Link href="/login" className="font-medium text-[hsl(var(--primary))] hover:underline">
-              Voltar ao login
+            <Link href="/entrar" className="font-medium text-[hsl(var(--primary))] hover:underline">
+              Voltar ao entrar
             </Link>
           </p>
         </div>

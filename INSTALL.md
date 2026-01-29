@@ -101,6 +101,9 @@ Cole suas credenciais do Supabase:
 NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGci...
 
+# Chave service_role (necessária para o painel /admin — ver .env.example)
+SUPABASE_SERVICE_ROLE_KEY=
+
 # Deixe o Asaas vazio por enquanto
 ASAAS_API_KEY=
 ASAAS_WEBHOOK_SECRET=
@@ -150,10 +153,16 @@ cd packages/database
 supabase db push
 ```
 
+## 👤 Painel admin (`/admin`)
+
+- Rotas: `/admin` (redireciona para `/admin/pessoas`), `/admin/pessoas` (lista com busca, filtros, paginação), `/admin/pessoas/[id]` (detalhe e edição de role/status).
+- Acesso: apenas usuários com `profile.role === 'admin'`; o layout do admin redireciona não-admins para `/dashboard`.
+- É obrigatório definir `SUPABASE_SERVICE_ROLE_KEY` no `.env.local` (e na Vercel em produção) — o cliente admin usa essa chave para ler e-mails em `auth.users` e contornar RLS.
+
 ## 🔐 Login e vínculo usuário ↔ produtos/serviços
 
-- **Rotas de auth:** `/login`, `/cadastro`, `/auth/esqueci-senha`, `/auth/reset-password`, `/auth/callback` (OAuth/magic link).
-- **Proteção:** o middleware redireciona quem não está logado de `/dashboard/*` para `/login` e atualiza a sessão em toda requisição.
+- **Rotas de auth:** `/entrar`, `/cadastro`, `/auth/esqueci-senha`, `/auth/reset-password`, `/auth/callback` (OAuth/magic link).
+- **Proteção:** o middleware redireciona quem não está logado de `/dashboard/*` para `/entrar` e atualiza a sessão em toda requisição.
 - **Usuário ↔ produtos/serviços:** já modelado no banco:
   - **profiles** — `role` (student/instructor/admin), `subscription_status`
   - **enrollments** — cursos em que o usuário está matriculado
@@ -262,6 +271,7 @@ brew install --cask visual-studio-code
 
 ---
 
-## 🚀 Indo para produção (VPS + domínio)
+## 🚀 Indo para produção
 
-Quando subir a VPS e tiver domínio, siga o checklist em **[DEPLOY.md](./DEPLOY.md)** (Supabase URLs, env vars, DNS).
+- **Vercel (recomendado)**: guia completo em **[DEPLOY.md](./DEPLOY.md)** — Root Directory `apps/web`, variáveis de ambiente, Supabase Redirect URLs e painel admin.
+- **VPS + domínio**: mesmo **[DEPLOY.md](./DEPLOY.md)**, seção “Deploy em VPS + domínio”.

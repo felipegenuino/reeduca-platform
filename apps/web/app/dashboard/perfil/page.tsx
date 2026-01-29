@@ -29,7 +29,7 @@ export default async function PerfilPage() {
   const current = await getCurrentUser();
   
   if (!current) {
-    redirect('/login?redirectTo=' + encodeURIComponent('/dashboard/perfil'));
+    redirect('/entrar?redirectTo=' + encodeURIComponent('/dashboard/perfil'));
   }
   
   const { user, profile } = current;

@@ -47,10 +47,10 @@ export default function EsqueciSenhaPage() {
             Se existir uma conta com <strong>{email}</strong>, você receberá um link para redefinir sua senha. Verifique também a pasta de spam.
           </p>
           <Link
-            href="/login"
+            href="/entrar"
             className="mt-5 inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-md bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] text-sm font-medium hover:opacity-90 transition-opacity duration-150"
           >
-            Voltar ao login
+            Voltar ao entrar
           </Link>
         </div>
       </div>
@@ -114,8 +114,8 @@ export default function EsqueciSenhaPage() {
           </form>
 
           <p className="mt-5 text-center text-sm text-[hsl(var(--muted-foreground))]">
-            <Link href="/login" className="font-medium text-[hsl(var(--primary))] hover:underline">
-              Voltar ao login
+            <Link href="/entrar" className="font-medium text-[hsl(var(--primary))] hover:underline">
+              Voltar ao entrar
             </Link>
           </p>
         </div>

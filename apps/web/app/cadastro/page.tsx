@@ -70,10 +70,10 @@ export default function CadastroPage() {
             Enviamos um link de confirmação para <strong>{email}</strong>. Abra o e-mail e clique no link para ativar sua conta.
           </p>
           <Link
-            href="/login"
+            href="/entrar"
             className="mt-5 inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-md bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] text-sm font-medium hover:opacity-90 transition-opacity duration-150"
           >
-            Ir para o login
+            Entrar
           </Link>
         </div>
       </div>
@@ -170,7 +170,7 @@ export default function CadastroPage() {
 
           <p className="mt-5 text-center text-sm text-[hsl(var(--muted-foreground))]">
             Já tem conta?{' '}
-            <Link href="/login" className="font-medium text-[hsl(var(--primary))] hover:underline">
+            <Link href="/entrar" className="font-medium text-[hsl(var(--primary))] hover:underline">
               Entrar
             </Link>
           </p>

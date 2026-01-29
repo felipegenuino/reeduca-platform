@@ -167,19 +167,8 @@ Sistema de auth com Supabase:
 
 ## 🚢 Deploy
 
-### Vercel (Recomendado para apps Next.js)
-
-```bash
-# Deploy automático via GitHub
-# Conectar repo ao Vercel
-```
-
-### VPS (Produção futura)
-
-```bash
-# Docker Compose
-docker-compose up -d
-```
+- **Vercel**: Conecte o repositório na [Vercel](https://vercel.com), defina **Root Directory** como `apps/web`, configure as variáveis de ambiente e as Redirect URLs no Supabase. Passo a passo completo em **[DEPLOY.md](./DEPLOY.md)**.
+- **VPS**: Ver **[DEPLOY.md](./DEPLOY.md)** (seção VPS + domínio).
 
 ## 📖 Documentação Adicional
 
