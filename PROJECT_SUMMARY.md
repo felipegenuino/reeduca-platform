@@ -91,6 +91,11 @@ reeduca-platform/
 - [x] RLS (Row Level Security) configurado
 - [x] Triggers automáticos (updated_at)
 - [x] Função auto-criar profile no signup
+- [x] **Quiz/Simulados** (migration `20260129100000_quiz_simulados.sql`):
+  - quiz_categories, quiz_questions, quiz_sets, quiz_set_questions, quiz_attempts
+  - Admin: CRUD categorias, perguntas e conjuntos em `/admin/simulados`
+  - Dashboard: listagem em `/dashboard/simulados`, fazer simulado (uma pergunta por tela), resultado e revisão com explicações
+  - Timer opcional por conjunto; refazer cria nova tentativa
 
 ### ✅ Auth (@reeduca/auth)
 - [x] Login email/senha

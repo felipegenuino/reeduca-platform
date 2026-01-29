@@ -210,6 +210,154 @@ export interface Database {
           updated_at?: string;
         };
       };
+      quiz_categories: {
+        Row: {
+          id: string;
+          name: string;
+          slug: string;
+          description: string | null;
+          sort_order: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          slug: string;
+          description?: string | null;
+          sort_order?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          slug?: string;
+          description?: string | null;
+          sort_order?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      quiz_questions: {
+        Row: {
+          id: string;
+          category_id: string;
+          statement: string;
+          options: Json;
+          explanation: string;
+          status: 'draft' | 'published';
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          category_id: string;
+          statement: string;
+          options: Json;
+          explanation: string;
+          status?: 'draft' | 'published';
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          category_id?: string;
+          statement?: string;
+          options?: Json;
+          explanation?: string;
+          status?: 'draft' | 'published';
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      quiz_sets: {
+        Row: {
+          id: string;
+          title: string;
+          slug: string;
+          description: string | null;
+          status: 'draft' | 'published';
+          time_limit_minutes: number | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          title: string;
+          slug: string;
+          description?: string | null;
+          status?: 'draft' | 'published';
+          time_limit_minutes?: number | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          title?: string;
+          slug?: string;
+          description?: string | null;
+          status?: 'draft' | 'published';
+          time_limit_minutes?: number | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      quiz_set_questions: {
+        Row: {
+          quiz_set_id: string;
+          question_id: string;
+          position: number;
+        };
+        Insert: {
+          quiz_set_id: string;
+          question_id: string;
+          position?: number;
+        };
+        Update: {
+          quiz_set_id?: string;
+          question_id?: string;
+          position?: number;
+        };
+      };
+      quiz_attempts: {
+        Row: {
+          id: string;
+          user_id: string;
+          quiz_set_id: string;
+          started_at: string;
+          finished_at: string | null;
+          score: number;
+          total: number;
+          answers_snapshot: Json;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          quiz_set_id: string;
+          started_at?: string;
+          finished_at?: string | null;
+          score?: number;
+          total: number;
+          answers_snapshot?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          quiz_set_id?: string;
+          started_at?: string;
+          finished_at?: string | null;
+          score?: number;
+          total?: number;
+          answers_snapshot?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
     };
     Views: {
       [_ in never]: never;

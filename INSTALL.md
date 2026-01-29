@@ -135,16 +135,24 @@ pnpm install
 
 #### Se estiver usando Supabase Cloud:
 
-1. Acesse o projeto no Supabase
-2. Vá em **SQL Editor**
-3. Clique em "+ New query"
-4. Cole o conteúdo do arquivo:
-   ```
-   packages/database/supabase/migrations/20260128000000_initial_schema.sql
-   ```
-5. Clique em **Run** (ou CMD+Enter)
+Execute as migrations **na ordem** (cada uma em uma nova query no SQL Editor):
 
-✅ Você deve ver "Success. No rows returned"
+1. **Schema inicial**  
+   Cole e execute: `packages/database/supabase/migrations/20260128000000_initial_schema.sql`
+
+2. **Papel cadastrado e policies**  
+   Cole e execute: `packages/database/supabase/migrations/20260129000000_add_cadastrado_role.sql`  
+   Depois: `packages/database/supabase/migrations/20260129000000_add_profile_insert_policy.sql`
+
+3. **Storage de avatares** (opcional)  
+   Cole e execute: `packages/database/supabase/migrations/20260129000001_setup_avatars_storage.sql`
+
+4. **Quiz / Simulados** (necessário para `/admin/simulados` e `/dashboard/simulados`)  
+   Cole e execute: `packages/database/supabase/migrations/20260129100000_quiz_simulados.sql`
+
+✅ Cada execução deve terminar com "Success" (ou "No rows returned").
+
+**Se aparecer** `Could not find the table 'public.quiz_questions'`: a migration do quiz (passo 4) ainda não foi rodada. Execute o conteúdo de `20260129100000_quiz_simulados.sql` no SQL Editor do Supabase.
 
 #### Se estiver usando Supabase Local:
 
