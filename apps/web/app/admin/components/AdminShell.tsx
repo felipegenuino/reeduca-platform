@@ -10,6 +10,7 @@ import {
   Menu,
   X,
   ArrowLeft,
+  Palette,
 } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@reeduca/ui';
@@ -18,6 +19,7 @@ import { createClient } from '@/lib/supabase/client';
 const navigation = [
   { label: 'Visão Geral', href: '/admin', icon: LayoutDashboard },
   { label: 'Pessoas', href: '/admin/pessoas', icon: Users },
+  { label: 'Kitchensink', href: '/admin/kitchensink', icon: Palette },
 ];
 
 const bottomNavigation = [

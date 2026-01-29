@@ -36,21 +36,19 @@ O código usa **sandbox** quando `NODE_ENV !== 'production'` (local = sandbox; V
 
 O webhook avisa sua aplicação quando um pagamento é confirmado (ex.: PIX pago). Assim você pode atualizar o banco e promover o usuário de “cadastrado” para “aluno”.
 
-### 3.1. Criar a URL do webhook na sua app
+### 3.1. URL do webhook na aplicação
 
-Você precisa de uma rota POST na aplicação que receba os eventos do Asaas, por exemplo:
+A rota já existe em `apps/web/app/api/webhooks/asaas/route.ts`. Use estas URLs:
 
-- **Local:** `http://localhost:3000/api/webhooks/asaas` (só para teste; o Asaas não acessa seu localhost).
-- **Produção:** `https://seu-dominio.vercel.app/api/webhooks/asaas`.
+- **Local:** o Asaas **não acessa localhost**. Para testar localmente, use um túnel (ex.: [ngrok](https://ngrok.com/) ou Cloudflare Tunnel) e configure a URL gerada + `/api/webhooks/asaas`.
+- **Produção:** `https://reeduca-platform-web.vercel.app/api/webhooks/asaas`.
 
-(Se essa rota ainda não existir no projeto, será preciso criar — por exemplo um Route Handler em `apps/web/app/api/webhooks/asaas/route.ts`.)
+### 3.2. Configurar no Asaas (produção)
 
-### 3.2. Configurar no Asaas
-
-1. No painel Asaas: **Integrações** → **Webhooks** (ou **Notificações**).
-2. Adicione uma **URL de notificação** com o endereço da sua rota (ex.: `https://reeduca-platform-web.vercel.app/api/webhooks/asaas`).
-3. Selecione os eventos que deseja receber (ex.: **Pagamento confirmado**, **Pagamento recebido**).
-4. Se o Asaas gerar um **token/secret** para validar as requisições, copie e guarde.
+1. No painel Asaas (produção): **Integrações** → **Webhooks**.
+2. Adicione uma **URL de notificação**: `https://reeduca-platform-web.vercel.app/api/webhooks/asaas`.
+3. Selecione os eventos: **Pagamento confirmado** (`PAYMENT_CONFIRMED`) e **Pagamento recebido** (`PAYMENT_RECEIVED`).
+4. Configure um **authToken** (recomendado): gere um valor forte (ex.: UUID v4) e use o mesmo em `ASAAS_WEBHOOK_SECRET` na Vercel. O Asaas envia esse valor no header `asaas-access-token`; a rota valida e rejeita com 401 se não bater.
 
 **Onde colocar o secret:**
 
@@ -60,7 +58,7 @@ Você precisa de uma rota POST na aplicação que receba os eventos do Asaas, po
   ```
 - **Produção (Vercel):** em **Environment Variables** → `ASAAS_WEBHOOK_SECRET`.
 
-No código, o provider usa `ASAAS_WEBHOOK_SECRET` (ou `PAYMENT_WEBHOOK_SECRET`) para validar a assinatura do webhook quando a validação estiver implementada.
+A rota do webhook valida o header `asaas-access-token` contra `ASAAS_WEBHOOK_SECRET`; se configurado e diferente, responde 401.
 
 ---
 
@@ -85,6 +83,14 @@ Alternativas aceitas pelo código: `PAYMENT_API_KEY` / `PAYMENT_WEBHOOK_SECRET` 
 4. (Opcional) Em **Webhooks**, configurar a URL da sua rota (ex.: `/api/webhooks/asaas`) e, se houver, o secret em `ASAAS_WEBHOOK_SECRET`.
 
 Depois disso, qualquer código que use `PaymentFactory.getProvider()` ou `paymentProvider` do pacote `@reeduca/pagamentos` usará a API do Asaas com a chave configurada.
+
+---
+
+### Checklist: webhook em produção
+
+- [ ] **Vercel:** variáveis `ASAAS_API_KEY` e `ASAAS_WEBHOOK_SECRET` configuradas (produção).
+- [ ] **Asaas (produção):** Webhook com URL `https://reeduca-platform-web.vercel.app/api/webhooks/asaas`, eventos **Pagamento confirmado** e **Pagamento recebido**, e **authToken** igual ao `ASAAS_WEBHOOK_SECRET`.
+- [ ] **Fluxo de compra:** ao criar a cobrança no Asaas, gravar em `purchases` com `asaas_payment_id` igual ao `id` retornado pelo Asaas, para o webhook encontrar a compra e atualizar para `paid` e promover o usuário a aluno.
 
 ---
 
