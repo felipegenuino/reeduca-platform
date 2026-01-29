@@ -259,3 +259,9 @@ brew install --cask visual-studio-code
 ```
 
 🎉 **Pronto! Agora é desenvolver!**
+
+---
+
+## 🚀 Indo para produção (VPS + domínio)
+
+Quando subir a VPS e tiver domínio, siga o checklist em **[DEPLOY.md](./DEPLOY.md)** (Supabase URLs, env vars, DNS).

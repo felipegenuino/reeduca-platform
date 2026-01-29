@@ -1,8 +1,10 @@
 import { getCurrentUser } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { User, Mail, Shield, CreditCard } from 'lucide-react';
+import Image from 'next/image';
 import { EditNameForm } from './EditNameForm';
 import { ChangePasswordForm } from './ChangePasswordForm';
+import { AvatarUpload } from './AvatarUpload';
 
 function roleLabel(role: string) {
   const labels: Record<string, string> = {
@@ -53,8 +55,18 @@ export default async function PerfilPage() {
           </div>
           <div className="px-5 py-4 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-md bg-[hsl(var(--accent))] flex items-center justify-center shrink-0">
-                <User className="w-[18px] h-[18px] text-[hsl(var(--accent-foreground))]" />
+              <div className="w-9 h-9 rounded-md bg-[hsl(var(--accent))] flex items-center justify-center shrink-0 overflow-hidden">
+                {profile.avatar_url ? (
+                  <Image
+                    src={profile.avatar_url}
+                    alt={profile.name || 'Avatar'}
+                    width={36}
+                    height={36}
+                    className="object-cover"
+                  />
+                ) : (
+                  <User className="w-[18px] h-[18px] text-[hsl(var(--accent-foreground))]" />
+                )}
               </div>
               <div>
                 <p className="text-xs text-[hsl(var(--muted-foreground))]">Nome</p>
@@ -98,6 +110,7 @@ export default async function PerfilPage() {
             </div>
 
             <EditNameForm initialName={profile.name ?? ''} />
+            <AvatarUpload currentAvatarUrl={profile.avatar_url} userId={user.id} />
           </div>
         </div>
       </section>
