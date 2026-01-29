@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
   BookOpen,
@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@reeduca/ui';
+import { createClient } from '@/lib/supabase/client';
 
 const navigation = [
   { label: 'Início', href: '/dashboard', icon: LayoutDashboard },
@@ -29,7 +30,16 @@ const bottomNavigation = [
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    setSidebarOpen(false);
+    router.push('/');
+    router.refresh();
+  };
 
   const isActive = (href: string) => {
     if (href === '/dashboard') return pathname === '/dashboard';
@@ -76,7 +86,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         {bottomNavigation.map((item) => (
           <NavLink key={item.href} item={item} />
         ))}
-        <button className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-[hsl(var(--sidebar-muted))] hover:text-[hsl(var(--destructive))] hover:bg-[hsl(var(--destructive))]/8 transition-colors duration-150 w-full">
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-[hsl(var(--sidebar-muted))] hover:text-[hsl(var(--destructive))] hover:bg-[hsl(var(--destructive))]/8 transition-colors duration-150 w-full"
+        >
           <LogOut className="w-[18px] h-[18px] shrink-0" />
           Sair
         </button>

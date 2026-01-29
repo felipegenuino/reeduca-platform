@@ -108,7 +108,27 @@ ASAAS_WEBHOOK_SECRET=
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-### 4. Criar tabelas no Supabase
+### 4. Configurar Auth (Supabase)
+
+Para login, cadastro e OAuth funcionarem:
+
+1. No **Supabase Dashboard** do projeto, vá em **Authentication** > **URL Configuration**
+2. Em **Redirect URLs**, adicione:
+   - `http://localhost:3000/auth/callback` (desenvolvimento)
+   - `https://seu-dominio.com/auth/callback` (produção, quando tiver)
+3. (Opcional) Em **Authentication** > **Providers** > **Email**: ative **Confirm email** se quiser que o usuário confirme o e-mail antes de entrar.
+
+### 5. Instalar dependências
+
+Na raiz do projeto:
+
+```bash
+pnpm install
+```
+
+(O pacote `@supabase/ssr` foi adicionado para sessão segura com cookies.)
+
+### 6. Criar tabelas no Supabase
 
 #### Se estiver usando Supabase Cloud:
 
@@ -129,6 +149,16 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 cd packages/database
 supabase db push
 ```
+
+## 🔐 Login e vínculo usuário ↔ produtos/serviços
+
+- **Rotas de auth:** `/login`, `/cadastro`, `/auth/esqueci-senha`, `/auth/reset-password`, `/auth/callback` (OAuth/magic link).
+- **Proteção:** o middleware redireciona quem não está logado de `/dashboard/*` para `/login` e atualiza a sessão em toda requisição.
+- **Usuário ↔ produtos/serviços:** já modelado no banco:
+  - **profiles** — `role` (student/instructor/admin), `subscription_status`
+  - **enrollments** — cursos em que o usuário está matriculado
+  - **purchases** — compras (produtos/cursos adquiridos)
+- Em Server Components ou Server Actions, use `getCurrentUser()` de `@/lib/auth` para obter `user` + `profile` e então consultar enrollments/purchases com o cliente Supabase do servidor.
 
 ## 🎯 Rodar o Projeto
 
