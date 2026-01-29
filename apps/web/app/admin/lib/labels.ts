@@ -1,5 +1,6 @@
 export function roleLabel(role: string): string {
   const labels: Record<string, string> = {
+    cadastrado: 'Cadastrado',
     student: 'Aluno',
     instructor: 'Instrutor',
     admin: 'Administrador',
@@ -23,6 +24,10 @@ export function roleBadgeVariant(role: string) {
       return 'default' as const;
     case 'instructor':
       return 'secondary' as const;
+    case 'student':
+      return 'outline' as const;
+    case 'cadastrado':
+      return 'outline' as const;
     default:
       return 'outline' as const;
   }

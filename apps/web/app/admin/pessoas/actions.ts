@@ -9,7 +9,7 @@ export type UserWithEmail = {
   name: string | null;
   email: string;
   avatar_url: string | null;
-  role: 'student' | 'instructor' | 'admin';
+  role: 'cadastrado' | 'student' | 'instructor' | 'admin';
   subscription_status: 'active' | 'inactive' | 'trial' | null;
   created_at: string;
 };
@@ -23,7 +23,7 @@ export type UsersListResult = {
 
 type ProfileRow = {
   id: string;
-  role: 'student' | 'instructor' | 'admin';
+  role: 'cadastrado' | 'student' | 'instructor' | 'admin';
 };
 
 async function requireAdminCaller() {
@@ -85,7 +85,7 @@ export async function fetchUsers(params: {
 
   // Role filter
   if (params.role && params.role !== 'all') {
-    query = query.eq('role', params.role as 'student' | 'instructor' | 'admin');
+    query = query.eq('role', params.role as 'cadastrado' | 'student' | 'instructor' | 'admin');
   }
 
   // Subscription status filter
@@ -122,7 +122,7 @@ export async function fetchUsers(params: {
     user_id: string;
     name: string | null;
     avatar_url: string | null;
-    role: 'student' | 'instructor' | 'admin';
+    role: 'cadastrado' | 'student' | 'instructor' | 'admin';
     subscription_status: 'active' | 'inactive' | 'trial' | null;
     created_at: string;
   };
@@ -139,4 +139,54 @@ export async function fetchUsers(params: {
   }));
 
   return { users, total: count ?? 0, page, pageSize };
+}
+
+export type CreateUserInput = {
+  email: string;
+  password: string;
+  name?: string;
+  role?: 'cadastrado' | 'student' | 'instructor' | 'admin';
+};
+
+export async function createUser(input: CreateUserInput): Promise<{ userId: string }> {
+  await requireAdminCaller();
+
+  const email = input.email.trim().toLowerCase();
+  if (!email) throw new Error('E-mail é obrigatório.');
+  if (!input.password || input.password.length < 6) {
+    throw new Error('A senha deve ter pelo menos 6 caracteres.');
+  }
+
+  const admin = createAdminClient();
+
+  const { data: authUser, error: authError } = await admin.auth.admin.createUser({
+    email,
+    password: input.password,
+    email_confirm: true,
+    user_metadata: input.name ? { name: input.name } : undefined,
+  });
+
+  if (authError) {
+    if (authError.message.includes('already been registered')) {
+      throw new Error('Já existe uma conta com este e-mail.');
+    }
+    throw new Error(authError.message);
+  }
+
+  if (!authUser.user?.id) throw new Error('Usuário criado mas ID não retornado.');
+
+  const role = input.role ?? 'cadastrado';
+
+  const { error: profileError } = await admin
+    .from('profiles')
+    .update({
+      role,
+      ...(input.name ? { name: input.name } : {}),
+      updated_at: new Date().toISOString(),
+    } as never)
+    .eq('user_id', authUser.user.id);
+
+  if (profileError) throw new Error(profileError.message);
+
+  return { userId: authUser.user.id };
 }

@@ -1,6 +1,6 @@
 import { supabase } from '@reeduca/database';
 
-export type UserRole = 'student' | 'instructor' | 'admin';
+export type UserRole = 'cadastrado' | 'student' | 'instructor' | 'admin';
 
 export const authMiddleware = {
   // Check if user is authenticated

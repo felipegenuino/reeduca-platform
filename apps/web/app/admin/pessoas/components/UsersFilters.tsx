@@ -74,6 +74,7 @@ export function UsersFilters({
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">Todos os papéis</SelectItem>
+          <SelectItem value="cadastrado">Cadastrado</SelectItem>
           <SelectItem value="student">Aluno</SelectItem>
           <SelectItem value="instructor">Instrutor</SelectItem>
           <SelectItem value="admin">Administrador</SelectItem>

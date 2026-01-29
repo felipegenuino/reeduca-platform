@@ -9,7 +9,7 @@ export interface Database {
           user_id: string;
           name: string | null;
           avatar_url: string | null;
-          role: 'student' | 'instructor' | 'admin';
+          role: 'cadastrado' | 'student' | 'instructor' | 'admin';
           subscription_status: 'active' | 'inactive' | 'trial' | null;
           metadata: Json | null;
           created_at: string;
@@ -20,7 +20,7 @@ export interface Database {
           user_id: string;
           name?: string | null;
           avatar_url?: string | null;
-          role?: 'student' | 'instructor' | 'admin';
+          role?: 'cadastrado' | 'student' | 'instructor' | 'admin';
           subscription_status?: 'active' | 'inactive' | 'trial' | null;
           metadata?: Json | null;
           created_at?: string;
@@ -31,7 +31,7 @@ export interface Database {
           user_id?: string;
           name?: string | null;
           avatar_url?: string | null;
-          role?: 'student' | 'instructor' | 'admin';
+          role?: 'cadastrado' | 'student' | 'instructor' | 'admin';
           subscription_status?: 'active' | 'inactive' | 'trial' | null;
           metadata?: Json | null;
           created_at?: string;

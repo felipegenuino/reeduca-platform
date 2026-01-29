@@ -8,6 +8,7 @@ import { AvatarUpload } from './AvatarUpload';
 
 function roleLabel(role: string) {
   const labels: Record<string, string> = {
+    cadastrado: 'Cadastrado',
     student: 'Aluno',
     instructor: 'Instrutor',
     admin: 'Administrador',

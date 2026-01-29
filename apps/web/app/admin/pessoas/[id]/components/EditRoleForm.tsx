@@ -22,7 +22,7 @@ import { updateUserRole, updateSubscriptionStatus } from '../actions';
 
 interface EditRoleFormProps {
   profileId: string;
-  currentRole: 'student' | 'instructor' | 'admin';
+  currentRole: 'cadastrado' | 'student' | 'instructor' | 'admin';
   currentStatus: 'active' | 'inactive' | 'trial' | null;
 }
 
@@ -38,13 +38,13 @@ export function EditRoleForm({
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [showAdminConfirm, setShowAdminConfirm] = useState(false);
-  const [pendingRole, setPendingRole] = useState<'student' | 'instructor' | 'admin' | null>(null);
+  const [pendingRole, setPendingRole] = useState<'cadastrado' | 'student' | 'instructor' | 'admin' | null>(null);
 
   const hasChanges =
     role !== currentRole || status !== (currentStatus ?? 'null');
 
   const handleRoleChange = (value: string) => {
-    const newRole = value as 'student' | 'instructor' | 'admin';
+    const newRole = value as 'cadastrado' | 'student' | 'instructor' | 'admin';
     // Confirm when changing to/from admin
     if (newRole === 'admin' || currentRole === 'admin') {
       setPendingRole(newRole);
@@ -103,6 +103,7 @@ export function EditRoleForm({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="cadastrado">Cadastrado</SelectItem>
                 <SelectItem value="student">Aluno</SelectItem>
                 <SelectItem value="instructor">Instrutor</SelectItem>
                 <SelectItem value="admin">Administrador</SelectItem>
@@ -154,7 +155,7 @@ export function EditRoleForm({
       <Dialog open={showAdminConfirm} onOpenChange={setShowAdminConfirm}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Alterar papel para {pendingRole === 'admin' ? 'Administrador' : pendingRole === 'instructor' ? 'Instrutor' : 'Aluno'}?</DialogTitle>
+            <DialogTitle>Alterar papel para {pendingRole === 'admin' ? 'Administrador' : pendingRole === 'instructor' ? 'Instrutor' : pendingRole === 'student' ? 'Aluno' : 'Cadastrado'}?</DialogTitle>
             <DialogDescription>
               {pendingRole === 'admin'
                 ? 'Administradores têm acesso total ao painel de gerenciamento da plataforma. Tem certeza?'

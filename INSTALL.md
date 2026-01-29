@@ -164,7 +164,7 @@ supabase db push
 - **Rotas de auth:** `/entrar`, `/cadastro`, `/auth/esqueci-senha`, `/auth/reset-password`, `/auth/callback` (OAuth/magic link).
 - **Proteção:** o middleware redireciona quem não está logado de `/dashboard/*` para `/entrar` e atualiza a sessão em toda requisição.
 - **Usuário ↔ produtos/serviços:** já modelado no banco:
-  - **profiles** — `role` (student/instructor/admin), `subscription_status`
+  - **profiles** — `role` (cadastrado, student, instructor, admin), `subscription_status`. Detalhes em **[docs/PAPEIS_E_JORNADA.md](./docs/PAPEIS_E_JORNADA.md)**.
   - **enrollments** — cursos em que o usuário está matriculado
   - **purchases** — compras (produtos/cursos adquiridos)
 - Em Server Components ou Server Actions, use `getCurrentUser()` de `@/lib/auth` para obter `user` + `profile` e então consultar enrollments/purchases com o cliente Supabase do servidor.

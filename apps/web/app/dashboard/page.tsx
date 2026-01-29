@@ -9,8 +9,11 @@ import {
   Wind,
   Activity,
   ArrowUpRight,
+  BookMarked,
 } from 'lucide-react';
 import Link from 'next/link';
+import { getCurrentUser } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 
 /* ── Dados mockados ─────────────────────────────────────── */
 
@@ -157,7 +160,45 @@ function CompetenciaItem({
 
 /* ── Página ────────────────────────────────────────────── */
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const current = await getCurrentUser();
+  if (!current) redirect('/entrar?redirectTo=' + encodeURIComponent('/dashboard'));
+
+  const { profile } = current;
+  const name = profile.name?.trim() || 'você';
+  const isCadastrado = profile.role === 'cadastrado';
+
+  if (isCadastrado) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-xl font-semibold text-[hsl(var(--foreground))] tracking-tight">
+            Olá, {name}
+          </h1>
+          <p className="text-sm text-[hsl(var(--muted-foreground))] mt-0.5">
+            Sua conta está ativa. Ainda não há cursos na sua conta — explore o catálogo e compre seu primeiro curso para começar a estudar.
+          </p>
+        </div>
+        <div className="rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-8 text-center">
+          <BookMarked className="w-12 h-12 mx-auto text-[hsl(var(--muted-foreground))] mb-4" />
+          <h2 className="text-base font-semibold text-[hsl(var(--foreground))] mb-2">
+            Nenhum curso ainda
+          </h2>
+          <p className="text-sm text-[hsl(var(--muted-foreground))] mb-5 max-w-sm mx-auto">
+            Quando você comprar um curso ou e-book, ele aparecerá aqui e no menu.
+          </p>
+          <Link
+            href="/#cursos"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-md bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] text-sm font-medium hover:opacity-90 transition-opacity"
+          >
+            Explorar catálogo
+            <ArrowUpRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Saudação + métricas inline */}

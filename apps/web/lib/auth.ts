@@ -6,7 +6,7 @@ export type Profile = {
   user_id: string;
   name: string | null;
   avatar_url: string | null;
-  role: 'student' | 'instructor' | 'admin';
+  role: 'cadastrado' | 'student' | 'instructor' | 'admin';
   subscription_status: 'active' | 'inactive' | 'trial' | null;
   created_at: string;
   updated_at: string;
@@ -51,14 +51,14 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
         user_id: user.id,
         name: user.user_metadata?.name || null,
         avatar_url: user.user_metadata?.avatar_url || null,
-        role: 'student',
+        role: 'cadastrado',
       } as never)
       .select('id, user_id, name, avatar_url, role, subscription_status, created_at, updated_at')
       .single();
 
     if (createError || !newProfile) {
       // Se falhar ao criar (ex: policy não existe), retorna null
-      // A página vai redirecionar para login
+      // A página vai redirecionar para entrar
       return null;
     }
     profile = newProfile;
@@ -102,7 +102,7 @@ export async function requireCurrentUser(): Promise<CurrentUser> {
         user_id: user!.id,
         name: user!.user_metadata?.name || null,
         avatar_url: user!.user_metadata?.avatar_url || null,
-        role: 'student',
+        role: 'cadastrado',
       } as never)
       .select('id, user_id, name, avatar_url, role, subscription_status, created_at, updated_at')
       .single();
@@ -121,4 +121,24 @@ export async function requireCurrentUser(): Promise<CurrentUser> {
     user: user!,
     profile: profile as unknown as Profile,
   };
+}
+
+/**
+ * Promove um usuário de "cadastrado" para "student" (para usar no webhook de pagamento).
+ * Só atualiza se o role atual for "cadastrado". Use quando a primeira compra for confirmada como paga.
+ * Requer SUPABASE_SERVICE_ROLE_KEY (chamada de servidor, ex.: Route Handler do webhook).
+ */
+export async function promoteUserToStudent(userId: string): Promise<boolean> {
+  const { createAdminClient } = await import('@/lib/supabase/admin');
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from('profiles')
+    .update({ role: 'student', updated_at: new Date().toISOString() } as never)
+    .eq('user_id', userId)
+    .eq('role', 'cadastrado')
+    .select('id')
+    .maybeSingle();
+
+  if (error) throw new Error(error.message);
+  return !!data;
 }

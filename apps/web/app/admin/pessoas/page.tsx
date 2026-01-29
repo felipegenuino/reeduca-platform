@@ -1,6 +1,7 @@
 import { fetchUsers } from './actions';
 import { UsersTable } from './components/UsersTable';
 import { UsersFilters } from './components/UsersFilters';
+import { AddPersonDialog } from './components/AddPersonDialog';
 
 export default async function PessoasPage({
   searchParams,
@@ -19,13 +20,16 @@ export default async function PessoasPage({
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-semibold tracking-tight text-[hsl(var(--foreground))]">
-          Pessoas
-        </h1>
-        <p className="text-sm text-[hsl(var(--muted-foreground))] mt-0.5">
-          Gerencie usuários, papéis e assinaturas.
-        </p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-xl font-semibold tracking-tight text-[hsl(var(--foreground))]">
+            Pessoas
+          </h1>
+          <p className="text-sm text-[hsl(var(--muted-foreground))] mt-0.5">
+            Gerencie usuários, papéis e assinaturas.
+          </p>
+        </div>
+        <AddPersonDialog />
       </div>
 
       <UsersFilters

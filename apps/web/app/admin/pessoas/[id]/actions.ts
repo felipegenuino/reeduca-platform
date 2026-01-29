@@ -6,7 +6,7 @@ import { revalidatePath } from 'next/cache';
 
 type ProfileRow = {
   id: string;
-  role: 'student' | 'instructor' | 'admin';
+  role: 'cadastrado' | 'student' | 'instructor' | 'admin';
 };
 
 async function requireAdminCaller() {
@@ -33,7 +33,7 @@ export type UserDetail = {
   name: string | null;
   email: string;
   avatar_url: string | null;
-  role: 'student' | 'instructor' | 'admin';
+  role: 'cadastrado' | 'student' | 'instructor' | 'admin';
   subscription_status: 'active' | 'inactive' | 'trial' | null;
   metadata: unknown;
   created_at: string;
@@ -51,7 +51,7 @@ export async function fetchUserDetail(profileId: string): Promise<UserDetail> {
     user_id: string;
     name: string | null;
     avatar_url: string | null;
-    role: 'student' | 'instructor' | 'admin';
+    role: 'cadastrado' | 'student' | 'instructor' | 'admin';
     subscription_status: 'active' | 'inactive' | 'trial' | null;
     metadata: unknown;
     created_at: string;
@@ -91,7 +91,7 @@ export async function fetchUserDetail(profileId: string): Promise<UserDetail> {
 
 export async function updateUserRole(
   profileId: string,
-  newRole: 'student' | 'instructor' | 'admin'
+  newRole: 'cadastrado' | 'student' | 'instructor' | 'admin'
 ): Promise<{ success: boolean }> {
   await requireAdminCaller();
 
