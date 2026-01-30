@@ -5,8 +5,8 @@
 @layer base {
   :root {
     /* Reeduca Premium — Paleta editorial: neutros quentes, teal profundo, hierarquia clara */
-    --background: 32 18% 97%;
-    --foreground: 218 18% 9%;
+    --background: 0deg 0% 100%;
+    --foreground: 0deg 0% 0%;
     --card: 32 14% 95%;
     --card-foreground: 218 18% 9%;
     --popover: 32 16% 98%;
