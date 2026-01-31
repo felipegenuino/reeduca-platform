@@ -4,6 +4,48 @@ Este guia cobre deploy na **Vercel** (recomendado) e em **VPS + domínio**.
 
 ---
 
+## Checklist — Produção estável
+
+Antes de considerar produção estável, confira:
+
+| Item | Onde |
+|------|------|
+| Build passa localmente | `pnpm install` (na raiz do repo) e `pnpm build` |
+| Variáveis de ambiente | Nenhum `.env` ou `.env.prod` commitado; usar apenas envs na Vercel |
+| Chaves públicas | `NEXT_PUBLIC_*` são expostas no front; não coloque `SUPABASE_SERVICE_ROLE_KEY` em variável pública |
+| Supabase prod | Site URL e Redirect URLs apontando para a URL real do app |
+| Storage avatares (prod) | Configurado manualmente no Supabase — ver [Storage de avatares em produção](#storage-de-avatares-em-produção) |
+| Admin | Pelo menos um usuário com `profiles.role = 'admin'` no Supabase (SQL ou painel) |
+
+### Variáveis sensíveis
+
+- **Não commitar:** `.env`, `.env.local`, `.env.prod`, `.env.production` (já estão no `.gitignore`).
+- **Vercel:** Configure todas as envs em **Settings → Environment Variables**. Para produção, use as chaves do projeto **Supabase de produção**.
+- Se uma chave vazou no GitHub: rode-a no Supabase (nova anon key / service role) e atualize na Vercel; não reutilize a chave exposta.
+
+### Storage de avatares em produção
+
+A migration do bucket `avatars` pode falhar em prod com *"must be owner of table objects"* (permissões do schema `storage`). Configure manualmente:
+
+**Opção A — SQL no Supabase (projeto prod):**
+
+1. **Dashboard** do projeto de produção → **SQL Editor**.
+2. Cole e execute o conteúdo do arquivo:
+   `packages/database/supabase/migrations/20260129000001_setup_avatars_storage.sql`.
+3. Se der erro de permissão em `storage.objects`, use a Opção B.
+
+**Opção B — Pelo Dashboard:**
+
+1. **Storage** → **New bucket** → Nome: `avatars`, marque **Public bucket**.
+2. Em **Policies** do bucket `avatars`, crie:
+   - **Upload:** usuários autenticados podem fazer insert onde `bucket_id = 'avatars'` e o nome do arquivo começa com o `user_id` (ex.: `{uuid}-123456.webp`).
+   - **Update/Delete:** mesmo critério (só os próprios arquivos).
+   - **Select:** público (leitura) para `bucket_id = 'avatars'`.
+
+Depois disso, o upload de avatar em `/dashboard/perfil` deve funcionar em produção.
+
+---
+
 ## Parte 1 — Deploy na Vercel
 
 ### 1. Conectar o repositório
@@ -72,6 +114,19 @@ Se usar domínio próprio depois (ex.: `https://app.reeduca.com`), repita com es
 - Garanta que `SUPABASE_SERVICE_ROLE_KEY` está definida nas variáveis de ambiente da Vercel.
 - Apenas usuários com `profile.role === 'admin'` acessam `/admin`; os demais são redirecionados para `/dashboard`.
 
+**Como definir um usuário como admin (produção):**
+
+1. No **Supabase Dashboard** do projeto de produção → **SQL Editor**.
+2. Execute (substitua `SEU_USER_ID` pelo `id` do usuário em `auth.users`):
+
+```sql
+update public.profiles
+set role = 'admin', updated_at = now()
+where user_id = 'SEU_USER_ID';
+```
+
+Para descobrir o `user_id`: **Authentication** → **Users** → copie o **User UID** do usuário.
+
 ---
 
 ### Problemas comuns na Vercel
@@ -98,6 +153,18 @@ Se usar domínio próprio depois (ex.: `https://app.reeduca.com`), repita com es
 **Node version**
 
 - Em **Project Settings** → **General** → **Node.js Version**, use **20.x** se o projeto exigir Node 20.
+
+**Build falha com "module is not defined" (ESM)**
+
+- O `next.config.js` do projeto usa `export default` (ESM). Garanta que não há `module.exports` no mesmo arquivo e que o Node da Vercel está em 20.x.
+
+**Build falha com "Mismatching @next/swc version"**
+
+- Não fixe `@next/swc` manualmente; use a versão do Next.js do projeto (ex.: Next 15.5). Rode `pnpm install` na raiz do repo e faça commit do `pnpm-lock.yaml` atualizado.
+
+**Monorepo: install na raiz**
+
+- Com **Root Directory** = `apps/web`, a Vercel pode rodar o install a partir da raiz do repositório (comportamento padrão em monorepos). Se o build reclamar de pacotes `@reeduca/*` ou de `tailwindcss-animate`, confira se o **Install Command** está como `pnpm install` e se o lockfile (`pnpm-lock.yaml`) está commitado na raiz. Após adicionar dependências em `apps/web`, rode `pnpm install` na raiz e faça commit do lockfile.
 
 ---
 
